@@ -10,7 +10,23 @@ from erpnext.accounts.doctype.journal_entry.journal_entry import (
     get_default_bank_cash_account,
 )
 from erpnext.setup.utils import get_exchange_rate
-from erpnext.accounts.doctype.bank_account.bank_account import get_party_bank_account
+try:
+    from erpnext.accounts.doctype.bank_account.bank_account import (
+        get_party_bank_account,
+    )
+except ImportError:
+
+    def get_party_bank_account(party_type, party):
+        """Fallback for newer ERPNext versions where the helper was removed."""
+        return frappe.db.get_value(
+            "Bank Account",
+            {
+                "party_type": party_type,
+                "party": party,
+                "is_company_account": 0,
+            },
+            "name",
+        )
 from posawesome.posawesome.api.m_pesa import submit_mpesa_payment
 from erpnext.accounts.utils import (
     QueryPaymentLedger,
