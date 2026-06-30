@@ -9,7 +9,6 @@ authors = [
 ]
 description = "POS Awesome for ERPNext"
 readme = "README.md"
-license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = []
