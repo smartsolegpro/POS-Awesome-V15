@@ -7,7 +7,19 @@ import json
 import frappe
 from frappe.utils import nowdate
 from frappe import _
-from erpnext.accounts.party import get_party_bank_account
+try:
+    from erpnext.accounts.doctype.bank_account.bank_account import get_party_bank_account
+except ImportError:
+    def get_party_bank_account(party_type, party):
+        return frappe.db.get_value(
+            "Bank Account",
+            {
+                "party_type": party_type,
+                "party": party,
+                "is_company_account": 0,
+            },
+            "name",
+        )
 from erpnext.accounts.doctype.payment_request.payment_request import (
     get_dummy_message,
     get_existing_payment_request_amount,
